@@ -37,7 +37,11 @@ namespace control_in_out
 
         [DllImport("plcommpro.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetDeviceData(int handle, string TableName, string Data, string Options);
-        
+
+
+        [DllImport("plcommpro.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetDeviceData(int handle, ref byte Buffer, int BufferSize, string TableName, string FieldNames, string Filter, string Options);
+
         static int result;
 
         public Form1()
@@ -78,9 +82,24 @@ namespace control_in_out
                 MessageBox.Show("Add user to userauthorize Success!");
             else
                 MessageBox.Show("Add user to userauthorize Fail!");
-
-            
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int ret = 0;
+            int BUFFERSIZE = 10 * 1024 * 1024;
+            byte[] buffer = new byte[BUFFERSIZE];
+            string devtablename = "user";
+            string str = "*";
+            string devdatfilter = "";
+            string options = "";
+            ret = GetDeviceData(result, ref buffer[0], BUFFERSIZE, devtablename, str, devdatfilter, options);
+            string retdata = System.Text.Encoding.UTF8.GetString(buffer);
+
+            listBox1.Text = retdata;
+        }
+
+      
 
         
     }
